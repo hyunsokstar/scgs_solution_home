@@ -1,12 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 
-import { Box, Button, Container, FormControl, Heading, Input, VStack, useToast } from "@chakra-ui/react";
+import { Box, Button, Container, FormControl, Heading, Input, VStack, useToast, Img, Center } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 // import { useParams } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
 
 // import { getUploadURL } from "../api";
 import { getUploadURL, uploadImage, createPhoto } from "../api";
+import { useState } from "react";
 
 type Props = {};
 
@@ -15,13 +16,10 @@ interface IForm {
 }
 
 function PhotoUploadButton({}: Props) {
-    // const { register, watch } = useForm();
-    // const { register, handleSubmit } = useForm<IForm>();
     const { register, handleSubmit, watch, reset } = useForm<IForm>();
+    const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+    // const roomPk = "1";
 
-    // const { roomPk } = useParams(1);
-    const roomPk  = "1";
-    
     const toast = useToast();
     const navigate = useNavigate();
 
@@ -38,20 +36,22 @@ function PhotoUploadButton({}: Props) {
     });
 
     const uploadImageMutation = useMutation(uploadImage, {
-        // onSuccess: (data: any) => {
-        //     console.log("upload result", data);
-        // },
-
         onSuccess: ({ result }: any) => {
+            console.log("result : ", result);
+            var roomPk = prompt("몇번째 방의 사진을 업로드?", "");
+
+            
+
             if (roomPk) {
                 createPhotoMutation.mutate({
                     description: "I love react",
-                    // file: `https://imagedelivery.net/aSbksvJjax-AUC7qVnaC4A/${result.id}/public`,
                     file: `https://imagedelivery.net/GDnsAXwwoW7vpBbDviU8VA/${result.id}/public`,
                     roomPk,
                 });
             }
-            // navigate(`/rooms/${roomPk}`);
+            // upload 된 이미지 주소
+            const uploaded_image = result.variants[0];
+            setUploadedImageUrl(uploaded_image);
         },
     });
 
@@ -67,7 +67,7 @@ function PhotoUploadButton({}: Props) {
     });
 
     const onSubmit = (data: any) => {
-        console.log("file data : ", data);
+        // console.log("file data : ", data);
         mutation.mutate();
     };
 
@@ -92,10 +92,14 @@ function PhotoUploadButton({}: Props) {
                             Upload photos
                         </Button> */}
                         <Button type="submit" w="full" colorScheme={"red"}>
-                            Upload photos2
+                            Upload photos
                         </Button>
                     </VStack>
                 </Container>
+                <br />
+                <Box alignContent={"Center"}>{uploadedImageUrl ? <Img src={uploadedImageUrl} /> : ""}</Box>
+
+
             </Box>
         </div>
     );
