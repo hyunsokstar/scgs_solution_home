@@ -6,6 +6,7 @@ import UsersList from "../components/UsersList";
 export default function Home() {
     return (
         <Box>
+            <br />
             <UsersList />
             <PhotoUploadButton />
             <RoomsList />

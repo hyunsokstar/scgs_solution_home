@@ -1,4 +1,4 @@
-import { Box, Table, TableCaption, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Table, TableCaption, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr , Text, Button } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { getUsersList } from "../api";
@@ -21,9 +21,11 @@ function UsersList() {
                     return <div>{user.username}</div>;
                 })} */}
 
-                <TableContainer>
-                    <Table variant="striped">
-                        <TableCaption>유저 리스트</TableCaption>
+                <Text fontSize='5xl' mb={5}> 유저 리스트 </Text>
+                <TableContainer mb={20}>
+                    <Table variant="simple">
+                        {/* <TableCaption>유저 리스트</TableCaption> */}
+
                         <Thead>
                             <Tr>
                                 <Th>userName</Th>
@@ -31,6 +33,7 @@ function UsersList() {
                                 <Th>is_host</Th>
                                 <Th>gender</Th>
                                 <Th>language</Th>
+                                <Th>수정</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -42,6 +45,7 @@ function UsersList() {
                                         <Td>{user.is_host}</Td>
                                         <Td>{user.gender}</Td>
                                         <Td>{user.language}</Td>
+                                        <Td><Button>수정</Button></Td>
                                     </Tr>
                                 );
                             })}
