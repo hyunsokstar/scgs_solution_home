@@ -1,11 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 
-import { Box, Button, Container, FormControl, Heading, Input, VStack } from "@chakra-ui/react";
+import { Box, Button, Container, FormControl, Heading, Input, VStack, useToast } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // import { getUploadURL } from "../api";
-import { getUploadURL, uploadImage } from "../api";
+import { getUploadURL, uploadImage, createPhoto } from "../api";
 
 type Props = {};
 
@@ -16,13 +17,41 @@ interface IForm {
 function PhotoUploadButton({}: Props) {
     // const { register, watch } = useForm();
     // const { register, handleSubmit } = useForm<IForm>();
-    const { register, handleSubmit, watch } = useForm<IForm>();
+    const { register, handleSubmit, watch, reset } = useForm<IForm>();
 
-    const { roomPk } = useParams();
+    // const { roomPk } = useParams(1);
+    const roomPk  = "1";
+    
+    const toast = useToast();
+    const navigate = useNavigate();
+
+    const createPhotoMutation = useMutation(createPhoto, {
+        onSuccess: () => {
+            toast({
+                status: "success",
+                title: "Image uploaded!",
+                isClosable: true,
+                description: "Feel free to upload more images.",
+            });
+            reset();
+        },
+    });
 
     const uploadImageMutation = useMutation(uploadImage, {
-        onSuccess: (data: any) => {
-            console.log("upload result", data);
+        // onSuccess: (data: any) => {
+        //     console.log("upload result", data);
+        // },
+
+        onSuccess: ({ result }: any) => {
+            if (roomPk) {
+                createPhotoMutation.mutate({
+                    description: "I love react",
+                    // file: `https://imagedelivery.net/aSbksvJjax-AUC7qVnaC4A/${result.id}/public`,
+                    file: `https://imagedelivery.net/GDnsAXwwoW7vpBbDviU8VA/${result.id}/public`,
+                    roomPk,
+                });
+            }
+            // navigate(`/rooms/${roomPk}`);
         },
     });
 
