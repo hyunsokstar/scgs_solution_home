@@ -1,7 +1,8 @@
-import { Box, Table, TableCaption, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr , Text, Button } from "@chakra-ui/react";
+import { Box, Table, TableCaption, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr, Text, Button, useDisclosure } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { getUsersList } from "../api";
+import UserInfoModifyModal from "./UserInfoModifyModal";
 
 interface IUsers {
     username: string;
@@ -13,15 +14,15 @@ interface IUsers {
 
 function UsersList() {
     const { isLoading, data } = useQuery<IUsers[]>(["users"], getUsersList);
+    const { isOpen: isUserModifyModalOpen, onClose: onUserModifyModalClose, onOpen: onUserModifyModalOpen } = useDisclosure();
 
     return (
         <div>
             <Box>
-                {/* {data?.map((user: IUsers) => {
-                    return <div>{user.username}</div>;
-                })} */}
-
-                <Text fontSize='5xl' mb={5}> 유저 리스트 </Text>
+                <Text fontSize="5xl" mb={5}>
+                    {" "}
+                    유저 리스트{" "}
+                </Text>
                 <TableContainer mb={20}>
                     <Table variant="simple">
                         {/* <TableCaption>유저 리스트</TableCaption> */}
@@ -45,20 +46,17 @@ function UsersList() {
                                         <Td>{user.is_host}</Td>
                                         <Td>{user.gender}</Td>
                                         <Td>{user.language}</Td>
-                                        <Td><Button>수정</Button></Td>
+                                        <Td>
+                                            {/* <Button>수정</Button> */}
+                                            <Button onClick={onUserModifyModalOpen}>Log in</Button>
+                                        </Td>
                                     </Tr>
                                 );
                             })}
                         </Tbody>
-                        {/* <Tfoot>
-      <Tr>
-        <Th>To convert</Th>
-        <Th>into</Th>
-        <Th isNumeric>multiply by</Th>
-      </Tr>
-    </Tfoot> */}
                     </Table>
                 </TableContainer>
+                <UserInfoModifyModal  isOpen={isUserModifyModalOpen} onClose={onUserModifyModalClose}/>
             </Box>
         </div>
     );

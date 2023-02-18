@@ -8,12 +8,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 //
-import {
-    // IUsernameLoginError,
-    // IUsernameLoginSuccess,
-    IUsernameLoginVariables,
-    usernameLogIn,
-} from "../api";
+import { IUsernameLoginVariables, usernameLogIn } from "../api";
 
 interface LoginModalProps {
     isOpen: boolean;
