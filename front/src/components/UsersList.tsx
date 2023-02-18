@@ -48,7 +48,7 @@ function UsersList() {
                                         <Td>{user.language}</Td>
                                         <Td>
                                             {/* <Button>수정</Button> */}
-                                            <Button onClick={onUserModifyModalOpen}>Log in</Button>
+                                            <Button onClick={onUserModifyModalOpen}>수정</Button>
                                         </Td>
                                     </Tr>
                                 );
