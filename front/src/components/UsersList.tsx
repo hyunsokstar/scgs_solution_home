@@ -2,18 +2,11 @@ import { Box, Table, TableCaption, TableContainer, Tbody, Td, Tfoot, Th, Thead, 
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { getUsersList } from "../api";
+import { IUsersForUserList } from "../types";
 import UserInfoModifyModal from "./UserInfoModifyModal";
 
-interface IUsers {
-    username: string;
-    avatar: string;
-    is_host: string;
-    gender: string;
-    language: string;
-}
-
 function UsersList() {
-    const { isLoading, data } = useQuery<IUsers[]>(["users"], getUsersList);
+    const { isLoading, data } = useQuery<IUsersForUserList[]>(["users"], getUsersList);
     const { isOpen: isUserModifyModalOpen, onClose: onUserModifyModalClose, onOpen: onUserModifyModalOpen } = useDisclosure();
 
     return (
@@ -38,17 +31,17 @@ function UsersList() {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {data?.map((user: IUsers) => {
+                            {data?.map((user: IUsersForUserList) => {
                                 return (
                                     <Tr>
                                         <Td>{user.username}</Td>
                                         <Td>{user.avatar}</Td>
-                                        <Td>{user.is_host}</Td>
+                                        <Td>{user.is_host ? "owner":"client"}</Td>
                                         <Td>{user.gender}</Td>
                                         <Td>{user.language}</Td>
                                         <Td>
-                                            {/* <Button>수정</Button> */}
-                                            <Button onClick={onUserModifyModalOpen}>수정</Button>
+                                            {/* <Button onClick={onUserModifyModalOpen}>수정</Button> */}
+                                            <UserInfoModifyModal isOpen={isUserModifyModalOpen} onClose={onUserModifyModalClose} user={user} />
                                         </Td>
                                     </Tr>
                                 );
@@ -56,7 +49,6 @@ function UsersList() {
                         </Tbody>
                     </Table>
                 </TableContainer>
-                <UserInfoModifyModal  isOpen={isUserModifyModalOpen} onClose={onUserModifyModalClose}/>
             </Box>
         </div>
     );

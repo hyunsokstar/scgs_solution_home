@@ -75,3 +75,11 @@ export interface IUser {
     language: string;
     currency: string;
 }
+
+interface IUsersForUserList {
+    username: string;
+    avatar: string;
+    is_host: string;
+    gender: string;
+    language: string;
+}
