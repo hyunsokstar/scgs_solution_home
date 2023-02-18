@@ -1,12 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import { getUploadURL } from "../api";
 
 import { Box, Button, Container, FormControl, Heading, Input, VStack } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
-type Props = {};
+// import { getUploadURL } from "../api";
+import { getUploadURL, uploadImage } from "../api";
 
+type Props = {};
 
 interface IForm {
     file: FileList;
@@ -14,18 +15,30 @@ interface IForm {
 
 function PhotoUploadButton({}: Props) {
     // const { register, watch } = useForm();
-    const { register, handleSubmit } = useForm<IForm>();
+    // const { register, handleSubmit } = useForm<IForm>();
+    const { register, handleSubmit, watch } = useForm<IForm>();
 
     const { roomPk } = useParams();
+
+    const uploadImageMutation = useMutation(uploadImage, {
+        onSuccess: (data: any) => {
+            console.log("upload result", data);
+        },
+    });
 
     const mutation = useMutation(getUploadURL, {
         onSuccess: (data: any) => {
             console.log("data : ", data);
+
+            uploadImageMutation.mutate({
+                uploadURL: data.uploadURL,
+                file: watch("file"),
+            });
         },
     });
 
     const onSubmit = (data: any) => {
-        // console.log("data : ", data);
+        console.log("file data : ", data);
         mutation.mutate();
     };
 

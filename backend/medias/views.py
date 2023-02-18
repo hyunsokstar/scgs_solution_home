@@ -27,8 +27,8 @@ class PhotoDetail(APIView):
         photo.delete()
         return Response(status=HTTP_200_OK)
 
-# https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/images/v2/direct_upload
 
+# https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/images/v2/direct_upload
 
 class GetUploadURL(APIView):
     print("get upload url 뷰 실행")
@@ -39,6 +39,10 @@ class GetUploadURL(APIView):
         one_time_url = requests.post(
             url, headers={"Authorization": f"Bearer {settings.CF_TOKEN}"}
         )
+        
         one_time_url = one_time_url.json()
-        print("in_time_url : ", one_time_url)
-        return Response(one_time_url)
+        # print("in_time_url : ", one_time_url)
+        # return Response(one_time_url)
+        
+        result = one_time_url.get("result")
+        return Response({"id": result.get("id"), "uploadURL": result.get("uploadURL")})
